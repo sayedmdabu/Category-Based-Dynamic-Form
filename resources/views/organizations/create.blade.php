@@ -1,10 +1,8 @@
-<!-- resources/views/form_templates/create.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
-    <h1>Create New Form Template</h1>
-    <form action="{{ route('form_templates.store') }}" method="POST">
+    <h1>Create New Organization</h1>
+    <form action="{{ route('organizations.store') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="name">Name:</label>

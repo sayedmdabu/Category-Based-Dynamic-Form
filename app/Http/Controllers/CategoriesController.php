@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Organization;
 use Illuminate\Http\Request;
 
 class CategoriesController extends Controller
@@ -13,15 +14,28 @@ class CategoriesController extends Controller
         return view('categories.index', compact('categories'));
     }
 
+
     public function create()
     {
-        return view('categories.create');
+        $organizations = Organization::all();
+        return view('categories.create', compact('organizations'));
     }
 
     public function store(Request $request)
     {
-        Category::create($request->all());
-        return redirect()->route('categories.index');
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'organization_id' => 'required|exists:organizations,id', // Validate that the organization exists
+        ]);
+
+        // Create the category with the provided data
+        Category::create([
+            'name' => $request->name,
+            'organization_id' => $request->organization_id,
+        ]);
+
+        // Redirect back with a success message
+        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
     public function show(Category $category)
